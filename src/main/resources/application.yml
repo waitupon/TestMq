@@ -1,0 +1,22 @@
+spring: #默认profiles
+  profiles:
+    active: test
+
+
+---
+spring:
+    profiles: test
+    #mq配置
+    rabbitmq:
+      host: 127.0.0.1
+      port: 5672
+      username: guest
+      password: guest
+      publisher-confirms: true
+      virtual-host: /
+#服务器端口配置
+server:
+  port: 8080
+  session-timeout: 60
+  servlet:
+    context-path: /
