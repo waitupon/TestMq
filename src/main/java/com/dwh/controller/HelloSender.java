@@ -2,13 +2,15 @@ package com.dwh.controller;
 
 import com.dwh.config.SenderConf;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HelloSender {
+public class HelloSender implements RabbitTemplate.ReturnCallback{
     @Autowired
-    private AmqpTemplate template;
+    private RabbitTemplate template;
 
     public void sendTopicSave(String msg) {
         template.convertAndSend(SenderConf.exchangeName,"topic.save",msg);
@@ -17,6 +19,15 @@ public class HelloSender {
 
 
     public void sendTopicDelete(String msg) {
+        template.setReturnCallback(this);
+        template.setConfirmCallback((correlationData, ack, cause)->{
+            if (!ack) {
+                    System.out.println("HelloSender消息发送失败" + cause);
+            } else {
+                System.out.println("HelloSender 消息发送成功 ");
+            }
+
+        });
         template.convertAndSend(SenderConf.exchangeName,"topic.delete",msg);
         System.out.println("send done!");
     }
@@ -24,5 +35,11 @@ public class HelloSender {
 
     public void sendMessage(){
         this.template.convertAndSend("topicExchange","topic.message","我是发送消息的内容! ");
+    }
+
+    @Override
+    public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        System.out.println("sender return success" + message.toString()+"==="+replyCode+"==="+replyText+"==="+exchange+"===="+routingKey);
+
     }
 }

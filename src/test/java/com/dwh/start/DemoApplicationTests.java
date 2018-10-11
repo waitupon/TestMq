@@ -22,16 +22,18 @@ public class DemoApplicationTests {
 
     @Test
     public void testRecv() {
-       // recevier.process(new String());
-      //  for(;;)
+//          for(;;)
+//        recevier.process(new String());
+
        // recevier.process1();
     }
 
     @Test
     public void testSend() {
-        helloSender.sendTopicSave("123");
-        helloSender.sendTopicDelete("234");
-
+    //    helloSender.sendTopicSave("123");
+        for(int i=0;i<100;i++) {
+            helloSender.sendTopicDelete("a" + i);
+        }
       //  helloSender.sendMessage();
     }
 }
