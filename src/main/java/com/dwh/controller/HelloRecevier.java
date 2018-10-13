@@ -1,6 +1,7 @@
 package com.dwh.controller;
 
 
+import com.dwh.model.User;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
@@ -13,25 +14,25 @@ import java.io.IOException;
 import java.util.Date;
 
 @Component
-@RabbitListener(queues="topic.all")
+@RabbitListener(queues="topic.baqgl.*")
 public class HelloRecevier {
 //    @Autowired
 //    private AmqpTemplate template;
 
     @RabbitHandler
-    public void process(String hello, Channel channel, Message message) throws IOException {
-        System.out.println("HelloReceiver收到  : " + hello +"收到时间"+new Date());
-          try {
+    public void process(User model, Channel channel, Message message) throws IOException {
+         System.out.println("HelloReceiver收到  : " + model +"收到时间"+new Date());
+              try {
+                  channel.basicQos(0,3,false);
          //   告诉服务器收到这条消息 已经被我消费了 可以在队列删掉 这样以后就不会再发了 否则消息服务器以为这条消息没处理掉 后续还会在发
 //                channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
-//                Thread.sleep(1000);
                 System.out.println("receiver success");
               } catch (Exception e) {
                   e.printStackTrace();
                //  丢弃这条消息
-                 channel.basicNack(message.getMessageProperties().getDeliveryTag(), false,false);
+                 channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
                          System.out.println("receiver fail");
-                }
+             }
       }
 
 

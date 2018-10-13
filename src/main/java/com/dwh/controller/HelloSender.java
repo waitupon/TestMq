@@ -1,25 +1,26 @@
 package com.dwh.controller;
 
+import com.dwh.config.AmqpConfig;
 import com.dwh.config.SenderConf;
+import com.dwh.model.User;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 public class HelloSender implements RabbitTemplate.ReturnCallback{
     @Autowired
     private RabbitTemplate template;
 
-    public void sendTopicSave(String msg) {
-        template.convertAndSend(SenderConf.exchangeName,"topic.save",msg);
-        System.out.println("send done!");
-    }
 
-
-    public void sendTopicDelete(String msg) {
+    public void sendTopicDelete(User msg) {
         template.setReturnCallback(this);
+
         template.setConfirmCallback((correlationData, ack, cause)->{
             if (!ack) {
                     System.out.println("HelloSender消息发送失败" + cause);
@@ -28,7 +29,9 @@ public class HelloSender implements RabbitTemplate.ReturnCallback{
             }
 
         });
-        template.convertAndSend(SenderConf.exchangeName,"topic.delete",msg);
+
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        template.convertAndSend(AmqpConfig.EXCHANGE_NAME,"topic.baqgl.save",msg,correlationData);
         System.out.println("send done!");
     }
 
