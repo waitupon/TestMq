@@ -1,9 +1,7 @@
-package com.dwh.controller;
+package com.dwh.rabbitmq.controller;
 
-import com.dwh.config.AmqpConfig;
-import com.dwh.config.SenderConf;
-import com.dwh.model.User;
-import org.springframework.amqp.core.AmqpTemplate;
+import com.dwh.rabbitmq.config.AmqpConfig;
+import com.dwh.rabbitmq.model.User;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;

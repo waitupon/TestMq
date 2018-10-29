@@ -1,8 +1,8 @@
 package com.dwh.start;
 
-import com.dwh.controller.HelloRecevier;
-import com.dwh.controller.HelloSender;
-import com.dwh.model.User;
+import com.dwh.rabbitmq.controller.HelloRecevier;
+import com.dwh.rabbitmq.controller.HelloSender;
+import com.dwh.rabbitmq.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class DemoApplicationTests {
     @Test
     public void testSend() {
     //    helloSender.sendTopicSave("123");
-        for(int i=0;i<100;i++) {
+        for(int i=0;i<1;i++) {
             User user = new User();
             user.setId(i+"");
             user.setName("tom"+i);

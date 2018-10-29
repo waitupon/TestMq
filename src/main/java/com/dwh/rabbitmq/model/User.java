@@ -1,4 +1,4 @@
-package com.dwh.model;
+package com.dwh.rabbitmq.model;
 
 
 import lombok.Getter;
