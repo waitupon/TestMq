@@ -7,16 +7,40 @@ spring: #默认profiles
 spring:
     profiles: test
     #mq配置
-    rabbitmq:
-      host: 127.0.0.1
-      port: 5672
-      username: guest
-      password: guest
-      publisher-confirms: true
-      virtual-host: /
+    rocketmq:
+        namesrvAddr: localhost:9876
+        #生产者group名称
+        producerGroupName: user_group
+        #事务生产者group名称
+        transactionProducerGroupName: order_transaction
+        #消费者group名称
+        consumerGroupName: user_consumer_group
+        #生产者实例名称
+        producerInstanceName: user_producer_instance
+        #消费者实例名称
+        consumerInstanceName: user_consumer_instance
+        #事务生产者实例名称
+        producerTranInstanceName: user_producer_transacition
+        #一次最大消费多少数量消息
+        consumerBatchMaxSize: 1
+        #广播消费
+        consumerBroadcasting: false
+        #消费的topic：tag
+        subscribe[0]: user-topic:white
+        #启动的时候是否消费历史记录
+        enableHistoryConsumer: false
+        #启动顺序消费
+        enableOrderConsumer: false
+#    rabbitmq:
+#      host: 127.0.0.1
+#      port: 5672
+#      username: guest
+#      password: guest
+#      publisher-confirms: true
+#      virtual-host: /
 #服务器端口配置
 server:
-  port: 8080
+  port: 8081
   session-timeout: 60
   servlet:
     context-path: /
